@@ -1,2 +1,2 @@
-# spotify_tracker
-Spotify Tracker in Python
+# spotify_auth
+Spotify Authentication / Authorization app in Python
