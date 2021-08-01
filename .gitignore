@@ -120,10 +120,14 @@ venv.bak/
 # mkdocs documentation
 /site
 
-# mypy
+# mypythewindwaker11/spotify_tracker
 .mypy_cache/
 .dmypy.json
 dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# extras
+settings.py
+.sqlite3
