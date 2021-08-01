@@ -29,27 +29,26 @@ class SpotifyAPI(object):
 
         client_creds = '{}:{}'.format(self.client_id, self.client_secret)
         client_creds = client_creds.encode()
-        client_creds_b64 = base64.b64encode(client_creds)
+        encoded_client_creds = base64.b64encode(client_creds)
 
-        return client_creds_b64
+        return encoded_client_creds
 
     def get_post_params(self):
         """
         Returns headers and data required for POST request
         """
 
-        client_creds_b64 = self._encode_credentials()
+        encoded_client_creds = self._encode_credentials()
 
         headers = {
             "Content-Type": "application/x-www-form-urlencoded",
-            "Authorization": f"Basic {client_creds_b64.decode()}"
+            "Authorization": f"Basic {encoded_client_creds.decode()}"
         }
         data = {
             "grant_type": "client_credentials"
         }
 
         return headers, data
-
 
     def authorize_credentials(self):
         """
@@ -67,7 +66,6 @@ class SpotifyAPI(object):
         self.handle_successful_auth(response)
 
         return True
-
 
     def is_request_successful(self, response):
         return response.status_code in range(200, 299)
