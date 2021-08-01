@@ -52,6 +52,11 @@ class SpotifyAPI(object):
 
 
     def authorize_credentials(self):
+        """
+        Authenticates user's credentials. Returns True whether 
+        the response is 200 or False in every other situation
+        """
+
         headers, data = self.get_post_params()
 
         response = requests.post(self.token_url, headers=headers, data=data)
@@ -59,17 +64,19 @@ class SpotifyAPI(object):
         if not self.is_request_successful(response):
             return False
 
-        now = datetime.datetime.now()
-
-        self.access_token = response.json()['access_token']
-        expires_in = response.json()['expires_in']
-
-        expires = now + datetime.timedelta(seconds=expires_in)
-        self.access_token_expires = expires
-        self.is_access_token_expired = expires < now
+        self.handle_successful_auth(response)
 
         return True
 
 
     def is_request_successful(self, response):
         return response.status_code in range(200, 299)
+
+    def handle_successful_auth(self, response):
+        now = datetime.datetime.now()
+
+        expires_in = response.json()['expires_in']
+
+        self.access_token = response.json()['access_token']
+        self.access_token_expires = now + datetime.timedelta(seconds=expires_in)
+        self.is_access_token_expired = self.access_token_expires < now
