@@ -25,7 +25,7 @@ class SpotifyAPI(object):
         """
 
         if self.client_id is None or self.client_secret is None:
-            raise Exception("You have not provided user's credentials")
+            raise Exception("You have not provided user's credentials.")
 
         client_creds = '{}:{}'.format(self.client_id, self.client_secret)
         client_creds = client_creds.encode()
@@ -78,3 +78,15 @@ class SpotifyAPI(object):
         self.access_token = response.json()['access_token']
         self.access_token_expires = now + datetime.timedelta(seconds=expires_in)
         self.is_access_token_expired = self.access_token_expires < now
+
+
+    def get_access_token(self):
+        token = self.access_token
+        expires = self.access_token_expires
+        now = datetime.datetime.now()
+
+        if expires < now or token is None:
+            self.authorize_credentials()
+            return self.get_access_token()
+
+        return token
